@@ -3,6 +3,7 @@ var https = require('https');
 var superagent = require('superagent');
 var cheerio = require('cheerio');
 
+var POLL_INTERVAL = 30 * 1000;
 var lastActivity;
 
 function postActivity(activity){
@@ -34,9 +35,11 @@ function doIt(){
         lastActivity = activity[0];
         postActivity(lastActivity);
       }
+      setTimeout(doIt, POLL_INTERVAL);
     });
+  }).on('error', (e) => {
+    console.error('error: ' + e.message);
   });
 }
 
 doIt();
-setInterval(doIt, 15000);
