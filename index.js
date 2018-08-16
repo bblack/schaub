@@ -30,7 +30,6 @@ function doIt(){
         .toArray()
         .map((e) => $(e).text()); // newest first
       console.log('fetched activity');
-      activity.forEach((e) => console.log(e));
       if (activity[0] != lastActivity) {
         lastActivity = activity[0];
         postActivity(lastActivity);
@@ -40,4 +39,4 @@ function doIt(){
 }
 
 doIt();
-setInterval(doIt, 3000);
+setInterval(doIt, 15000);
