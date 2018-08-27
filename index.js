@@ -31,9 +31,14 @@ function doIt(){
     res.on('data', (chk) => body += chk);
     res.on('end', () => {
       var $ = cheerio.load(body);
-      var activity = $("ul#lo-recent-activity-list>li .recent-activity-fulldesc")
+      var activity = $("ul#lo-recent-activity-list>li")
         .toArray()
-        .map((e) => $(e).text()); // newest first
+        .map((e) => {
+          $(e).find('br').replaceWith('\n'); // MODIFIES IN-PLACE!
+          var desc = $(e).find('.recent-activity-description').text();
+          var descMore = $(e).find('.recent-activity-fulldesc').text();
+          return desc + (descMore ? ('\n' + descMore) : '');
+        });
       log('fetched activity');
       if (activity[0] != lastActivity) {
         if (lastActivity) {
